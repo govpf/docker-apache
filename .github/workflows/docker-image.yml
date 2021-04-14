@@ -13,7 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        versions: [2.4]
+        version: [2.4]
+        distro: [stretch, buster]
+
     env:
       repo: "govpf/apache"
     steps:
@@ -30,17 +32,29 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     -
+      name: Compute tags
+      env:
+        repo: ${{ env.repo }}
+        version: ${{ matrix.version }}
+        distro: ${{ matrix.distro }}
+      run: |
+        TAGS="${repo}:${version}-${distro}"
+        if [[ $distro == 'stretch' ]]; then
+          TAGS+=",${repo}:${version}"
+        fi
+        echo 'docker_tags<<EOF' >> $GITHUB_ENV
+        echo "$TAGS" >> $GITHUB_ENV
+        echo 'EOF' >> $GITHUB_ENV
+    -
       name: Build and push
       uses: docker/build-push-action@v2
       with:
         context: .
-        file: ./${{ matrix.versions }}/Dockerfile
+        file: ./${{ matrix.version }}/${{ matrix.distro }}/Dockerfile
         platforms: linux/amd64
         pull: true
         push: true
-        tags: |
-          ${{ env.repo }}:${{ matrix.versions }}
-
+        tags: ${{ env.docker_tags }}
     - name: Update repo description
       uses: peter-evans/dockerhub-description@v2
       with:
