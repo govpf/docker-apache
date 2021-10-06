@@ -18,7 +18,7 @@ jobs:
       repo: "govpf/apache"
     steps:
 
-    - ame: Checkout
+    - name: Checkout
       uses: actions/checkout@v2.3.4
 
     - name: Set up Docker Buildx
