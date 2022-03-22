@@ -37,4 +37,13 @@ for e in "${!APACHE_@}"; do
 	fi
 done
 
+for f in /docker-entrypoint-init.d/*; do
+  [ -f "$f" ] || continue
+  case "$f" in
+    *.sh)     echo "$0: running $f"; . "$f" ;;
+    *)        echo "$0: ignoring $f" ;;
+  esac
+  echo
+done
+
 exec apache2 -DFOREGROUND "$@"

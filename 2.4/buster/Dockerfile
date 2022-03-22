@@ -1,7 +1,7 @@
 FROM govpf/debian:buster
 
-ENV APACHE_CONFDIR /etc/apache2
-ENV APACHE_ENVVARS $APACHE_CONFDIR/envvars
+ENV APACHE_CONFDIR=/etc/apache2
+ENV APACHE_ENVVARS=$APACHE_CONFDIR/envvars
 
 RUN set -eux; \
 	apt-get update; \
@@ -50,7 +50,8 @@ RUN { \
 		echo '\tAllowOverride All'; \
 		echo '</Directory>'; \
 	} | tee "$APACHE_CONFDIR/conf-available/docker-default.conf" \
-	&& a2enconf docker-default
+	&& a2enconf docker-default \
+	&& mkdir /docker-entrypoint-init.d
 
 COPY 2.4/docker-entrypoint 2.4/apache2-foreground /usr/local/bin/
 
