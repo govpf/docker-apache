@@ -38,7 +38,10 @@ RUN set -eux; \
 	ln -sfT /dev/stdout "$APACHE_LOG_DIR/other_vhosts_access.log"; \
 	chown -R --no-dereference "$APACHE_RUN_USER:$APACHE_RUN_GROUP" "$APACHE_LOG_DIR"; \
 # Allow to run as a non-root user
-	chown -R "$APACHE_RUN_USER:$APACHE_RUN_GROUP" "$APACHE_CONFDIR"; \
+	adduser --system --no-create-home --group apache; \
+	usermod -a -G www-data apache; \
+	chown -R apache:apache "$APACHE_CONFDIR"; \
+	chmod g+w $APACHE_RUN_DIR; \
 	sed -i "s/<VirtualHost.*:80>/<VirtualHost *>/g" /etc/apache2/sites-available/000-default.conf; \
 # Security
 	sed -i 's/^ServerTokens.*/ServerTokens Prod/' /etc/apache2/conf-available/security.conf; \
@@ -65,5 +68,5 @@ ENTRYPOINT ["docker-entrypoint"]
 WORKDIR /var/www/html
 STOPSIGNAL SIGWINCH
 EXPOSE 80 443
-USER www-data
+USER apache
 CMD ["apache2-foreground"]
