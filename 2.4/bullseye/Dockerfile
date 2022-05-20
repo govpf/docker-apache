@@ -31,6 +31,8 @@ RUN set -eux; \
 	\
 # delete the "index.html" that installing Apache drops in here
 	rm -rvf /var/www/html/*; \
+	mkdir -p /var/www/html; \
+	chown www-data:www-data /var/www/html; \
 	\
 # logs should go to stdout / stderr
 	ln -sfT /dev/stderr "$APACHE_LOG_DIR/error.log"; \
@@ -44,8 +46,19 @@ RUN set -eux; \
 	chmod g+w $APACHE_RUN_DIR; \
 	sed -i "s/<VirtualHost.*:80>/<VirtualHost *>/g" /etc/apache2/sites-available/000-default.conf; \
 # Security
+# https://owasp.org/www-project-secure-headers
+# https://owasp.org/www-project-secure-headers/#div-bestpractices
+	a2enmod headers; \
+	sed -i 's/#Header set X-Content-Type-Options.*/Header set X-Content-Type-Options: "nosniff"/' /etc/apache2/conf-available/security.conf; \
+	sed -i 's/#Header set X-Frame-Options.*/Header set X-Frame-Options: "deny"/' /etc/apache2/conf-available/security.conf; \
 	sed -i 's/^ServerTokens.*/ServerTokens Prod/' /etc/apache2/conf-available/security.conf; \
-	sed -i 's/^ServerSignature.*/ServerSignature Off/' /etc/apache2/conf-available/security.conf;
+	sed -i 's/^ServerSignature.*/ServerSignature Off/' /etc/apache2/conf-available/security.conf; \
+	echo "Header set Content-Security-Policy: \"default-src 'self'; object-src 'none'; child-src 'self'; frame-ancestors 'none'; upgrade-insecure-requests; block-all-mixed-content\"\n" >> /etc/apache2/conf-available/security-extras.conf; \
+	echo "Header set Cache-Control: 'no-store'" >> /etc/apache2/conf-available/security-extras.conf; \
+	echo "Header set Permissions-Policy: 'accelerometer=(),autoplay=(),camera=(),display-capture=(),document-domain=(),encrypted-media=(),fullscreen=(),geolocation=(),gyroscope=(),magnetometer=(),microphone=(),midi=(),payment=(),picture-in-picture=(),publickey-credentials-get=(),screen-wake-lock=(),sync-xhr=(self),usb=(),web-share=(),xr-spatial-tracking=()'" >> /etc/apache2/conf-available/security-extras.conf; \
+	echo "Header set Strict-Transport-Security: 'max-age=31536000 ; includeSubDomains; preload'" >> /etc/apache2/conf-available/security-extras.conf; \
+	echo "Header set Referrer-Policy: 'no-referrer'" >> /etc/apache2/conf-available/security-extras.conf; \
+	a2enconf security-extras;
 
 RUN a2dismod mpm_event && a2enmod mpm_prefork
 
@@ -67,6 +80,6 @@ ENTRYPOINT ["docker-entrypoint"]
 
 WORKDIR /var/www/html
 STOPSIGNAL SIGWINCH
-EXPOSE 80 443
+EXPOSE 8080
 USER apache
 CMD ["apache2-foreground"]
