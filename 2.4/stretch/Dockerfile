@@ -3,6 +3,8 @@ FROM govpf/debian:stretch
 ENV APACHE_CONFDIR=/etc/apache2
 ENV APACHE_ENVVARS=$APACHE_CONFDIR/envvars
 
+ENV APACHE_HTTP_PORT 80
+
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends apache2; \
