@@ -37,7 +37,7 @@ jobs:
         distro: ${{ matrix.distro }}
       run: |
         TAGS="${repo}:${version}-${distro}"
-        if [[ $distro == 'stretch' ]]; then
+        if [[ $distro == 'buster' ]]; then
           TAGS+=",${repo}:${version}"
         fi
         echo 'docker_tags<<EOF' >> $GITHUB_ENV

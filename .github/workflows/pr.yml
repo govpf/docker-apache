@@ -27,14 +27,14 @@ jobs:
         distro: ${{ matrix.distro }}
       run: |
         TAGS="${repo}:${version}-${distro}"
-        if [[ $distro == 'stretch' ]]; then
+        if [[ $distro == 'buster' ]]; then
           TAGS+=",${repo}:${version}"
         fi
         echo 'docker_tags<<EOF' >> $GITHUB_ENV
         echo "$TAGS" >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
 
-    - name: Build and push
+    - name: Build
       uses: docker/build-push-action@v3.0.0
       with:
         context: .
