@@ -1,0 +1,69 @@
+FROM govpf/debian:bullseye
+
+ENV APACHE_CONFDIR=/etc/apache2
+ENV APACHE_ENVVARS=$APACHE_CONFDIR/envvars
+
+RUN set -eux; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends apache2; \
+	apt-get remove --purge --auto-remove -y; \
+	rm -rf /var/lib/apt/lists/*; \
+	\
+# generically convert lines like
+#   export APACHE_RUN_USER=www-data
+# into
+#   : ${APACHE_RUN_USER:=www-data}
+#   export APACHE_RUN_USER
+# so that they can be overridden at runtime ("-e APACHE_RUN_USER=...")
+	sed -ri 's/^export ([^=]+)=(.*)$/: ${\1:=\2}\nexport \1/' "$APACHE_ENVVARS"; \
+	\
+# setup directories and permissions
+	. "$APACHE_ENVVARS"; \
+	for dir in \
+		"$APACHE_LOCK_DIR" \
+		"$APACHE_RUN_DIR" \
+		"$APACHE_LOG_DIR" \
+	; do \
+		rm -rvf "$dir"; \
+		mkdir -p "$dir"; \
+		chown "$APACHE_RUN_USER:$APACHE_RUN_GROUP" "$dir"; \
+	done; \
+	\
+# delete the "index.html" that installing Apache drops in here
+	rm -rvf /var/www/html/*; \
+	\
+# logs should go to stdout / stderr
+	ln -sfT /dev/stderr "$APACHE_LOG_DIR/error.log"; \
+	ln -sfT /dev/stdout "$APACHE_LOG_DIR/access.log"; \
+	ln -sfT /dev/stdout "$APACHE_LOG_DIR/other_vhosts_access.log"; \
+	chown -R --no-dereference "$APACHE_RUN_USER:$APACHE_RUN_GROUP" "$APACHE_LOG_DIR"; \
+# Allow to run as a non-root user
+	chown -R "$APACHE_RUN_USER:$APACHE_RUN_GROUP" "$APACHE_CONFDIR"; \
+	sed -i "s/<VirtualHost.*:80>/<VirtualHost *>/g" /etc/apache2/sites-available/000-default.conf; \
+# Security
+	sed -i 's/^ServerTokens.*/ServerTokens Prod/' /etc/apache2/conf-available/security.conf; \
+	sed -i 's/^ServerSignature.*/ServerSignature Off/' /etc/apache2/conf-available/security.conf;
+
+RUN a2dismod mpm_event && a2enmod mpm_prefork
+
+RUN { \
+		echo 'DirectoryIndex disabled'; \
+		echo 'DirectoryIndex index.html'; \
+		echo; \
+		echo '<Directory /var/www/>'; \
+		echo '\tOptions -Indexes'; \
+		echo '\tAllowOverride All'; \
+		echo '</Directory>'; \
+	} | tee "$APACHE_CONFDIR/conf-available/docker-default.conf" \
+	&& a2enconf docker-default \
+	&& mkdir /docker-entrypoint-init.d
+
+COPY 2.4/docker-entrypoint 2.4/apache2-foreground /usr/local/bin/
+
+ENTRYPOINT ["docker-entrypoint"]
+
+WORKDIR /var/www/html
+STOPSIGNAL SIGWINCH
+EXPOSE 80 443
+USER www-data
+CMD ["apache2-foreground"]
