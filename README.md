@@ -77,8 +77,10 @@ COPY ./scripts/001-init.sh /docker-entrypoint-init.d/
 
 ### Non-root user
 
-Seul le tag `2.4-bullseye` est en `non-root user` actuellement.
+Seul le tag `2.4-bullseye` est en `non-root user` actuellement. Le container est lancé en tant que `apache`. L'utilisateur `apache` fait parti du group `www-data` et a les droits `rw` sur `/etc/apache2` et `/var/www/html`.
 Les versions `2.4`, `2.4-stretch` et `2.4-buster` utilisent le user `root` pour pouvoir sur le port `80` par défaut.
+
+Dans les deux cas, le process apache est exécuté en tant que `wwww-data`.
 
 ### Port d'écoute par défaut
 
