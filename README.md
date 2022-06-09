@@ -78,11 +78,11 @@ COPY ./scripts/001-init.sh /docker-entrypoint-init.d/
 ### Non-root user
 
 Seul le tag `2.4-bullseye` est en `non-root user` actuellement.
-Les versions `2.4`, `2.4-stretch` et `2.4-buster` utilisent le user `root` pour pouvoir continuer à exposer sur le port `80` par défaut.
+Les versions `2.4`, `2.4-stretch` et `2.4-buster` utilisent le user `root` pour pouvoir sur le port `80` par défaut.
 
 ### Port d'écoute par défaut
 
-Seul le tag `2.4-bullseye` est écouté sur le port `8080` par défaut.
+Seul le tag `2.4-bullseye` écoute sur le port `8080` par défaut.
 Les versions `2.4`, `2.4-stretch` et `2.4-buster` écoutent le port `80` par défaut.
 
 ### Entêtes de sécurité
