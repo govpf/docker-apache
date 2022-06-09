@@ -80,6 +80,6 @@ ENTRYPOINT ["docker-entrypoint"]
 
 WORKDIR /var/www/html
 STOPSIGNAL SIGWINCH
-EXPOSE 8080
+
 USER apache
 CMD ["apache2-foreground"]
