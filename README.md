@@ -86,8 +86,9 @@ Dans les deux cas, le process apache est exécuté en tant que `www-data`.
 ### Port d'écoute par défaut
 
 Seul le tag `2.4-bullseye` écoute sur le port `8080` par défaut.
+
 Les versions `2.4`, `2.4-stretch` et `2.4-buster` écoutent le port `80` par défaut.
 
 ### Entêtes de sécurité
 
-Les versions `2.4`, `2.4-stretch` et `2.4-buster`, par défaut, n'ont que les entêtes **ServerTokens Prod** et **ServerSignature Off** de configurés
+Les versions `2.4`, `2.4-stretch` et `2.4-buster`, par défaut, n'ont que les entêtes **ServerTokens Prod** et **ServerSignature Off** de configurés.
