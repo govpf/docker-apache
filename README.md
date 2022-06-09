@@ -3,7 +3,7 @@
 
 Ce dépôt contient les recettes permettant de générer les images Apache du Gouvernement de la Polynésie Française.
 
-Fonctionalités :
+Fonctionnalités :
 - Exécution en non-root user (uniquement la version **2.4-bullseye**)
 - Possibilité d'exécuter des scripts au démarrage du container avant le lancement de Apache
 - Reconfiguration du port sur lequel Apache écoute via variable d'environnement
