@@ -43,7 +43,7 @@ RUN set -eux; \
 	adduser --system --no-create-home --group apache; \
 	usermod -a -G www-data apache; \
 	chown -R apache:apache "$APACHE_CONFDIR"; \
-	chmod g+w $APACHE_RUN_DIR; \
+	chmod g+w $APACHE_RUN_DIR /var/www/html; \
 	sed -i "s/<VirtualHost.*:80>/<VirtualHost *>/g" /etc/apache2/sites-available/000-default.conf; \
 # Security
 # https://owasp.org/www-project-secure-headers
