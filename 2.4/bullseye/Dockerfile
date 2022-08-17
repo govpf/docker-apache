@@ -5,6 +5,7 @@ ENV APACHE_ENVVARS=$APACHE_CONFDIR/envvars
 
 RUN set -eux; \
 	apt-get update; \
+	apt-get upgrade -y; \
 	apt-get install -y --no-install-recommends apache2; \
 	apt-get remove --purge --auto-remove -y; \
 	rm -rf /var/lib/apt/lists/*; \
