@@ -51,6 +51,6 @@ done
 APACHE_HTTP_PORT=${APACHE_HTTP_PORT:-8080}
 APACHE_HTTPS_PORT=${APACHE_HTTPS_PORT:-8443}
 sed -i "s/^Listen 80/Listen ${APACHE_HTTP_PORT}/g" /etc/apache2/ports.conf
-sed -i "s/^Listen 443/Listen ${APACHE_HTTPS_PORT}/g" /etc/apache2/ports.conf
+sed -i "s/Listen 443/Listen ${APACHE_HTTPS_PORT}/g" /etc/apache2/ports.conf
 
 exec apache2 -DFOREGROUND "$@"
