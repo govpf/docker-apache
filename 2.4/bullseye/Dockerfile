@@ -54,7 +54,7 @@ RUN set -eux; \
 	sed -i 's/#Header set X-Frame-Options.*/Header set X-Frame-Options: "deny"/' /etc/apache2/conf-available/security.conf; \
 	sed -i 's/^ServerTokens.*/ServerTokens Prod/' /etc/apache2/conf-available/security.conf; \
 	sed -i 's/^ServerSignature.*/ServerSignature Off/' /etc/apache2/conf-available/security.conf; \
-	echo "Header set Content-Security-Policy: \"default-src 'self'; connect-src 'self' *.gov.pf ; script-src 'self' 'unsafe-inline' ; object-src 'none'; child-src 'self'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'; upgrade-insecure-requests; block-all-mixed-content\"\n" >> /etc/apache2/conf-available/security-extras.conf; \
+	echo "Header set Content-Security-Policy: \"default-src 'self'; connect-src 'self' *.gov.pf *.gouv.pf ; script-src 'self' 'unsafe-inline' ; object-src 'none'; child-src 'self'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'; upgrade-insecure-requests; block-all-mixed-content\"\n" >> /etc/apache2/conf-available/security-extras.conf; \
 	echo "Header set Cache-Control: 'no-store'" >> /etc/apache2/conf-available/security-extras.conf; \
 	echo "Header set Permissions-Policy: 'accelerometer=(),autoplay=(),camera=(),display-capture=(),document-domain=(),encrypted-media=(),fullscreen=(),geolocation=(),gyroscope=(),magnetometer=(),microphone=(),midi=(),payment=(),picture-in-picture=(),publickey-credentials-get=(),screen-wake-lock=(),sync-xhr=(self),usb=(),web-share=(),xr-spatial-tracking=()'" >> /etc/apache2/conf-available/security-extras.conf; \
 	echo "Header set Strict-Transport-Security: 'max-age=31536000 ; includeSubDomains; preload'" >> /etc/apache2/conf-available/security-extras.conf; \
