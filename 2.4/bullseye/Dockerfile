@@ -75,7 +75,7 @@ RUN { \
 	&& a2enconf docker-default \
 	&& mkdir /docker-entrypoint-init.d
 
-COPY 2.4/docker-entrypoint 2.4/apache2-foreground /usr/local/bin/
+COPY 2.4/alpine/docker-entrypoint 2.4/alpine/apache2-foreground /usr/local/bin/
 
 ENTRYPOINT ["docker-entrypoint"]
 
