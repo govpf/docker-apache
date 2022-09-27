@@ -2,10 +2,8 @@ FROM govpf/alpine:3
 RUN set -eux; \
 	apk update; \
 	apk upgrade; \
-	apk add apache2 apache2-ctl  apache2-proxy vim; \  
-	apk del --purge; 
-	#rc-update add apache2; \
-	#touch /run/openrc/softlevel;
+	apk add apache2 apache2-ctl apache2-proxy; \
+    apk del --purge;
 
 RUN rm -rvf /var/www/localhost; \
         rm -rvf /var/www/logs; \
@@ -71,8 +69,6 @@ STOPSIGNAL SIGWINCH
 USER apache
 CMD ["apache2-foreground"]
 
-#RUN chown -R apache:apache /etc/apache2; \
-#    chmod g+w /var/www/html; \
 
 
 
