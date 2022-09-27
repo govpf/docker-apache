@@ -53,7 +53,8 @@ RUN echo $'<VirtualHost *> \n\
      </Directory> \n\
 </VirtualHost>' > /etc/apache2/conf.d/000-default.conf
 
-COPY docker-entrypoint apache2-foreground /usr/local/bin/
+COPY 2.4/alpine/docker-entrypoint 2.4/alpine/apache2-foreground /usr/local/bin/
+
 RUN chmod 755 /usr/local/bin/docker-entrypoint; \
        chmod 755 /usr/local/bin/apache2-foreground;
 RUN chown -R apache:apache /etc/apache2; \ 
