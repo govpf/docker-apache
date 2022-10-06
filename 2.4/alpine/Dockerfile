@@ -2,7 +2,7 @@ FROM govpf/alpine:3
 RUN set -eux; \
 	apk update; \
 	apk upgrade; \
-	apk add apache2 apache2-ctl apache2-proxy; \
+	apk add apache2 apache2-ctl apache2-proxy apache2-ssl; \
     apk del --purge;
 
 RUN rm -rvf /var/www/localhost; \
@@ -31,7 +31,8 @@ RUN sed -i '\%ScriptAlias% s/^/#/' /etc/apache2/httpd.conf ;\
  	sed -i '/<IfModule dir_module>/a  \ \ \ \ DirectoryIndex disabled' /etc/apache2/httpd.conf; \
 	sed -i 's#Options Indexes FollowSymLinks#Options -Indexes#' /etc/apache2/httpd.conf; \
 	sed -i 's#AllowOverride None#AllowOverride All#' /etc/apache2/httpd.conf; \
-	sed -i 's#Require all granted##' /etc/apache2/httpd.conf; 
+	sed -i 's#Require all granted##' /etc/apache2/httpd.conf; \
+	sed -i 's/logs/\/var\/log\/apache2/g' /etc/apache2/conf.d/ssl.conf;
  	#sed -i 's/Listen 80/Listen 8080/' /etc/apache2/httpd.conf; 
 
 RUN echo $'<Directory /var/www/html/> \n\
