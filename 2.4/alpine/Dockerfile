@@ -32,7 +32,8 @@ RUN sed -i '\%ScriptAlias% s/^/#/' /etc/apache2/httpd.conf ;\
 	sed -i 's#Options Indexes FollowSymLinks#Options -Indexes#' /etc/apache2/httpd.conf; \
 	sed -i 's#AllowOverride None#AllowOverride All#' /etc/apache2/httpd.conf; \
 	sed -i 's#Require all granted##' /etc/apache2/httpd.conf; \
-	sed -i 's/logs/\/var\/log\/apache2/g' /etc/apache2/conf.d/ssl.conf;
+	sed -i 's/logs/\/var\/log\/apache2/g' /etc/apache2/conf.d/ssl.conf; \
+	sed -i 's/443/8443/g' /etc/apache2/conf.d/ssl.conf;
  	#sed -i 's/Listen 80/Listen 8080/' /etc/apache2/httpd.conf; 
 
 RUN echo $'<Directory /var/www/html/> \n\
