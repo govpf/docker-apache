@@ -55,13 +55,20 @@ RUN echo $'<VirtualHost *> \n\
 
 COPY 2.4/alpine/docker-entrypoint 2.4/alpine/apache2-foreground /usr/local/bin/
 
+RUN curl https://bin.gov.pf/artifactory/ca/casit-prod2.crt > /usr/local/share/ca-certificates/casit-prod2.crt; \
+    update-ca-certificates
+
 RUN chmod 755 /usr/local/bin/docker-entrypoint; \
-       chmod 755 /usr/local/bin/apache2-foreground;
-RUN chown -R apache:apache /etc/apache2; \ 
-    chown apache:apache /var/log/apache2; \
-    chown apache:apache /run/apache2;  \
+    chmod 755 /usr/local/bin/apache2-foreground;\
+    chown -R apache:apache /etc/apache2; \ 
+    chown -R apache:apache /var/log/apache2; \
+    chown -R apache:apache /var/run/apache2; \
+    chown -R apache:apache /run/apache2;  \
     chown -R apache:apache /var/www; \
-    chown apache:apache /usr/lib/apache2; 
+    chown -R apache:apache /usr/lib/apache2; \
+    chown -R apache:apache /etc/ssl/apache2
+
+
 
 ENTRYPOINT ["docker-entrypoint"]
 
