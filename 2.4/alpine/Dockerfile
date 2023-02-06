@@ -68,8 +68,6 @@ RUN chmod 755 /usr/local/bin/docker-entrypoint; \
     chown -R apache:apache /usr/lib/apache2; \
     chown -R apache:apache /etc/ssl/apache2
 
-
-
 ENTRYPOINT ["docker-entrypoint"]
 
 WORKDIR /var/www/html
