@@ -37,6 +37,12 @@ for e in "${!APACHE_@}"; do
 	fi
 done
 
+# Listening port
+# Greater than 1024 so we can run as a non-root user
+APACHE_HTTP_PORT=${APACHE_HTTP_PORT:-8080}
+APACHE_HTTPS_PORT=${APACHE_HTTPS_PORT:-8443}
+sed -i "s/^Listen 80/Listen ${APACHE_HTTP_PORT}/g" /etc/apache2/httpd.conf
+
 for f in /docker-entrypoint-init.d/*; do
   [ -f "$f" ] || continue
   case "$f" in
@@ -45,12 +51,6 @@ for f in /docker-entrypoint-init.d/*; do
   esac
   echo
 done
-
-# Listening port
-# Greater than 1024 so we can run as a non-root user
-APACHE_HTTP_PORT=${APACHE_HTTP_PORT:-8080}
-APACHE_HTTPS_PORT=${APACHE_HTTPS_PORT:-8443}
-sed -i "s/^Listen 80/Listen ${APACHE_HTTP_PORT}/g" /etc/apache2/httpd.conf
 
 exec httpd -DFOREGROUND "$@"
 
