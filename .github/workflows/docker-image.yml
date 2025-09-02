@@ -12,9 +12,7 @@ jobs:
     strategy:
       matrix:
         version: [2.4]
-        # distro: [alpine]
-        distro: [bullseye, alpine]
-        #distro: [stretch, buster, bullseye, alpine]
+        distro: [stretch, buster, bullseye, alpine]
 
     env:
       repo: "govpf/apache"
