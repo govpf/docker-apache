@@ -1,4 +1,4 @@
-FROM govpf/alpine:3
+FROM govpf/alpine:3.24
 RUN set -eux; \
 	apk update; \
 	apk upgrade; \
