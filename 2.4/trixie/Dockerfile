@@ -1,5 +1,8 @@
 FROM govpf/debian:trixie
 
+LABEL govpf.category="webserver"
+LABEL govpf.fromimage="govpf/debian:trixie"
+
 ENV APACHE_CONFDIR=/etc/apache2
 ENV APACHE_ENVVARS=$APACHE_CONFDIR/envvars
 

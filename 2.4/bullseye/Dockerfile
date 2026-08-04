@@ -1,5 +1,8 @@
 FROM govpf/debian:bullseye
 
+LABEL govpf.category="webserver"
+LABEL govpf.fromimage="govpf/debian:bullseye"
+
 ENV APACHE_CONFDIR=/etc/apache2
 ENV APACHE_ENVVARS=$APACHE_CONFDIR/envvars
 

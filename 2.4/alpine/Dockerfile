@@ -1,4 +1,8 @@
 FROM govpf/alpine:3.24
+
+LABEL govpf.category="webserver"
+LABEL govpf.fromimage="govpf/alpine:3.24"
+
 RUN set -eux; \
 	apk update; \
 	apk upgrade; \
