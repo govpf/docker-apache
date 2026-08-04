@@ -1,6 +1,6 @@
 FROM govpf/alpine:3.24
 
-LABEL govpf.category="webserver"
+LABEL govpf.category="server"
 LABEL govpf.fromimage="govpf/alpine:3.24"
 
 RUN set -eux; \

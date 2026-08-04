@@ -1,6 +1,6 @@
 FROM govpf/debian:bullseye
 
-LABEL govpf.category="webserver"
+LABEL govpf.category="server"
 LABEL govpf.fromimage="govpf/debian:bullseye"
 
 ENV APACHE_CONFDIR=/etc/apache2
